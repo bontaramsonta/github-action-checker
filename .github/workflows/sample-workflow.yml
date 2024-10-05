@@ -16,6 +16,6 @@ jobs:
               run: echo "Job A has run successfully"
     job-b:
         runs-on: ubuntu-latest
-        needs: "job-a"
+        needs: ["job-a"]
         steps:
             - run: echo "Job B has run successfully"

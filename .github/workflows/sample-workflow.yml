@@ -20,7 +20,7 @@ jobs:
                   echo "result=Hello from job-a" >> $GITHUB_OUTPUT
     job-b:
         runs-on: ubuntu-latest
-        if: always() && needs.job-a.result == 'always'
+        if: always()
         needs: ["job-a"]
         steps:
-            - run: echo "Job B has run successfully and got input - ${{ needs.job-a.result }}"
+            - run: echo "Job B has run successfully and got input - ${{ needs.job-a.outputs.output-a }}"

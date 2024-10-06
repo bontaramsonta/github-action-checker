@@ -11,11 +11,16 @@ jobs:
     job-a:
         if: ${{ github.event_name == 'pull_request' }}
         runs-on: ubuntu-latest
+        outputs:
+            output-a: ${{ steps.step-1.outputs.result }}
         steps:
             - name: "step 1 of ${{ github.job }}"
-              run: echo "Job A has run successfully"
+              id: step-1
+              run: echo "Job A has run successfully" |
+                  echo "result=Hello from job-a" >> $GITHUB_OUTPUT
     job-b:
         runs-on: ubuntu-latest
+        if: always() && needs.job-a.result == 'always'
         needs: ["job-a"]
         steps:
-            - run: echo "Job B has run successfully"
+            - run: echo "Job B has run successfully and got input - ${{ needs.job-a.result }}"

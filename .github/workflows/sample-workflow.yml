@@ -9,18 +9,21 @@ on:
             - main
 jobs:
     job-a:
-        if: ${{ github.event_name == 'pull_request' }}
         runs-on: ubuntu-latest
         outputs:
-            output-a: ${{ steps.step-1.outputs.result }}
-        steps:
-            - name: "step 1 of ${{ github.job }}"
-              id: step-1
-              run: echo "Job A has run successfully" |
-                  echo "result=Hello from job-a" >> $GITHUB_OUTPUT
+            output-a: ${{ steps.random-num.outputs.Random_Num }}
+            steps:
+                - name: Calculate Random Num in the event of a PR
+                id: random-num
+                if: github.event_name == 'pull_request'
+                outputs:
+                run: |
+                  Random_Num=$((PRNUM%ENVCOUNT))
+                  echo "Random_Num=$Random_Num"
+                  echo "Random_Num=$Random_Num" >> $GITHUB_OUTPUT
     job-b:
         runs-on: ubuntu-latest
-        if: always()
+        if: (always() && !cancelled()) && (github.event_name == 'pull_request')
         needs: ["job-a"]
         steps:
             - run: echo "Job B has run successfully and got input - ${{ needs.job-a.outputs.output-a }}"

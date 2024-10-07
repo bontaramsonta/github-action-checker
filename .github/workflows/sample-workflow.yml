@@ -22,7 +22,6 @@ jobs:
                   echo "Random_Num=$Random_Num" >> $GITHUB_OUTPUT
     job-b:
         runs-on: ubuntu-latest
-        if: (always() && !cancelled()) && (github.event_name == 'pull_request')
         needs: ["job-a"]
         steps:
             - run: echo "Job B has run successfully and got input - ${{ needs.job-a.outputs.output-a }}"

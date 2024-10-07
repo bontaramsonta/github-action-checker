@@ -12,12 +12,11 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             output-a: ${{ steps.random-num.outputs.Random_Num }}
-            steps:
-                - name: Calculate Random Num in the event of a PR
-                id: random-num
-                if: github.event_name == 'pull_request'
-                outputs:
-                run: |
+        steps:
+            - name: Calculate Random Num in the event of a PR
+              id: random-num
+              if: github.event_name == 'pull_request'
+              run: |
                   Random_Num=$((PRNUM%ENVCOUNT))
                   echo "Random_Num=$Random_Num"
                   echo "Random_Num=$Random_Num" >> $GITHUB_OUTPUT
